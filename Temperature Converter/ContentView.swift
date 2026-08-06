@@ -12,7 +12,7 @@ struct ContentView: View {
     
     @State var temperature: String = ""
     @State var fahrenheit: Double = 0
-    
+    @State var error: String = ""
     
     var body: some View {
         VStack {
@@ -26,20 +26,34 @@ struct ContentView: View {
             TextField("Temperature", text: $temperature)
                 .textFieldStyle(.roundedBorder)
                 .padding()
-            Text("\(fahrenheit) °F")
+            if error == ""{
+                Text(String(format: "%.2f", fahrenheit) + "°F")
+            } else {
+                Text("\(error)")
+            }
         }
         
         Button("Convert"){
             if let number = Double(temperature){
+                error = ""
                 fahrenheit = convertToFahrenheit(celsius: number)
+            } else {
+                error = "Please enter a valid number"
+                fahrenheit = 0
             }
+            
         }
+        
+        
         Button("Reset"){
             temperature = ""
             fahrenheit = 0
         }
         .padding()
     }
+    
+    
+    
     func convertToFahrenheit(celsius: Double) -> Double {
         return (celsius * 9/5) + 32
     }
